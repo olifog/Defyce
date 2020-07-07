@@ -165,7 +165,7 @@ class guild(commands.Cog):
         await discord.utils.sleep_until(sunday_night)
 
     @commands.command()
-    async def forcereqs(self, guildname):
+    async def forcereqs(self, ctx, guildname):
         await self.guildreqs(guildname)
 
     @commands.command(brief="Check players under/above a certain weekly gexp threshold")

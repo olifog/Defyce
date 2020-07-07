@@ -157,7 +157,7 @@ class guild(commands.Cog):
         try:
             await staff_chat.send(embed=embed)
         except discord.errors.HTTPException:
-            await ctx.send(dispguildname + " Guild rank checks")
+            await staff_chat.send(dispguildname + " Guild rank checks")
             for x in range(len(desc)//2048):
                 embed = discord.Embed(description=desc[x*2048:(x+1)*2048])
                 await staff_chat.send(embed=embed)

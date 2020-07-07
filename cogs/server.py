@@ -12,7 +12,7 @@ class server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        wchan = self.bot.guild.get_channel(678440881954619413)
+        wchan = self.bot.guild.get_channel(728665600683147315)
 
         desc = "Head over to <#678442072755273749> to verify yourself!\n\n"
         desc += "Please follow all our rules at <#672565003420958723>\n"

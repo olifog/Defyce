@@ -74,6 +74,7 @@ class guild(commands.Cog):
     async def total(self, ctx, guildname):
         """
         Displays the guild's overall xp earned over the last week.
+
         Usage: `>total (guild name, Defy or Pace)`
         """
 
@@ -101,6 +102,24 @@ class guild(commands.Cog):
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title="<:top:730049558327066694> " + dispguildname + " total Guild Exp earned")
         await ctx.send(embed=embed)
+
+    @commands.command(brief="Check players under/above a certain weekly gexp threshold")
+    async def check(self, ctx, guildname, above, threshold):
+        """
+        Displays all the users that are above/below the weekly threshold that you give.
+
+        Usage: `>check (guild name, Defy or Pace) (above/below) (threshold)`
+        """
+
+        accessguildname = guildname.lower()
+        dispguildname = guildname[0].upper() + guildname[1:].lower()
+
+        guild_data = await self.bot.db[accessguildname].find_one({})
+
+        if guild_data is None:
+            return await ctx.send("Please specify a guild- either Defy or Pace.")
+
+
 
 
 def setup(bot):

@@ -87,7 +87,7 @@ class Updater:
                 except KeyError:
                     pass
 
-            update['members'].append({'name': p['player'], 'uuid': member['uuid'], 'rank': member['rank']})
+            update['members'].append({'name': p['player'], 'uuid': member['uuid'], 'rank': member['rank'], 'weekexp': newExpHistory['week']})
 
         for timeframe in top:
             top[timeframe] = sorted(top[timeframe], key=itemgetter('xp'), reverse=True)[:10]

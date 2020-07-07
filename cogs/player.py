@@ -2,6 +2,7 @@ import asyncio
 import base64
 import datetime
 
+from extras.hypixel import PlayerNotFoundException, HypixelAPIError
 from discord.ext import commands
 
 
@@ -34,7 +35,17 @@ class player(commands.Cog):
                 target = (base64.b64encode(str(ctx.author).encode()).decode('utf-8')[:5] + '#1234').strip('+/=-')
                 break
 
-        player = await self.bot.hypixelapi.getPlayer(name=ign)
+        try:
+            player = await self.bot.hypixelapi.getPlayer(name=ign)
+        except PlayerNotFoundException:
+            return await ctx.send("Can't find that MC ign on Hypixel!")
+
+        try:
+            guild = await self.bot.hypixelapi.getGuild(player=player.UUID)
+            if guild.JSON['name'] not in ['Defy', 'Pace']:
+                raise HypixelAPIError
+        except HypixelAPIError:
+            return await ctx.send("You must be in either Defy or Pace to verify!")
 
         try:
             daccount = player.JSON['socialMedia']['links']['DISCORD']
@@ -45,7 +56,7 @@ class player(commands.Cog):
             member = {'discordid': ctx.author.id, 'displayname': ign, 'uuid': player.UUID, 'online': False, 'remove': False}
 
             await self.bot.db.verified.insert_one(member)
-            return await ctx.send(f"**{ctx.author.mention} Verified as {ign}!")
+            return await ctx.send(f"**{ctx.author.mention} Verified as {ign}!**")
 
         vmessage = "> Please follow the steps below to verify your MC account!"
         vmessage += "\n\n**How to verify:**\n\t*- Connect to* `mc.hypixel.net`"

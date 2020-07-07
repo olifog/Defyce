@@ -41,6 +41,7 @@ class Defyce(commands.Bot):
         self.est = timezone("US/Eastern")
 
         self.owner = 404244659024429056
+        self.guild = None
         self.uptime = datetime.now()
 
         self.theme = discord.Colour(16711680)
@@ -58,6 +59,8 @@ class Defyce(commands.Bot):
             await self.load_mods()
 
         self.logger.info("Bot ready")
+
+        self.guild = self.get_guild(637032923505098765)
 
         watch = discord.Activity(type=discord.ActivityType.watching, name=">help | Defyce")
         await self.change_presence(status=discord.Status.idle, activity=watch)

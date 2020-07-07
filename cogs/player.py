@@ -2,7 +2,7 @@ import asyncio
 import base64
 import datetime
 
-from extras.hypixel import PlayerNotFoundException, HypixelAPIError
+from extras.hypixel import PlayerNotFoundException, GuildNotFoundException
 from discord.ext import commands
 
 
@@ -43,8 +43,8 @@ class player(commands.Cog):
         try:
             guild = await self.bot.hypixelapi.getGuild(player=player.UUID)
             if guild.JSON['name'] not in ['Defy', 'Pace']:
-                raise HypixelAPIError
-        except HypixelAPIError:
+                raise GuildNotFoundException
+        except GuildNotFoundException:
             return await ctx.send("You must be in either Defy or Pace to verify!")
 
         try:

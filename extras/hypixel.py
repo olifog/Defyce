@@ -13,6 +13,9 @@ class PlayerNotFoundException(Exception):
         You can catch this exception with ``except hypixel.PlayerNotFoundException:`` """
     pass
 
+class GuildNotFoundException(Exception):
+    pass
+
 
 class HypixelAPI(object):
     def __init__(self, key, handler):
@@ -36,6 +39,10 @@ class HypixelAPI(object):
         if typeOfRequest == 'player':
             if response['player'] is None:
                 raise PlayerNotFoundException()
+
+        if typeOfRequest == 'guild':
+            if response['guild'] is None:
+                raise GuildNotFoundException()
 
         try:
             return response[typeOfRequest]

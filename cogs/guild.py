@@ -142,25 +142,25 @@ class guild(commands.Cog):
                 continue
 
             if warranted > place:
-                desc += "**" + player['name'] + "** - *Promotion from* " + player['rank'] + " *to* " + ranks[warranted]
+                desc += "**" + player['name'] + "** - *PROMOTION from* " + player['rank'] + " *to* " + ranks[warranted]
                 diff = player['weekexp'] - reqs[place]
-                desc += "*, above current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n\n'
+                desc += "*, above current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n'
             elif warranted == 0:
-                desc += "**" + player['name'] + "** - *Needs to be kicked, low XP; only* **" + str(player['weekexp']) + "** *this week.*\n\n"
+                desc += "**" + player['name'] + "** - *KICK, low XP; only* **" + str(player['weekexp']) + "** *this week.*\n"
             else:
-                desc += "**" + player['name'] + "** - *Demotion from* " + player['rank'] + " *to* " + ranks[warranted]
+                desc += "**" + player['name'] + "** - *DEMOTION from* " + player['rank'] + " *to* " + ranks[warranted]
                 diff = reqs[place] - player['weekexp']
-                desc += "*, below current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n\n'
+                desc += "*, below current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n'
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc,
                               title=dispguildname + " Guild rank checks")
         try:
             await staff_chat.send(embed=embed)
         except discord.errors.HTTPException:
-            embed = discord.Embed(description=desc[:2048],title=dispguildname + " Guild rank checks")
-            await staff_chat.send(embed=embed)
-            embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc[2048:])
-            await staff_chat.send(embed=embed)
+            await ctx.send(dispguildname + " Guild rank checks")
+            for x in range(len(desc)//2048):
+                embed = discord.Embed(description=desc[x*2048:(x+1)*2048])
+                await staff_chat.send(embed=embed)
 
 
     @exprequirements.before_loop

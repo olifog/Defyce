@@ -76,7 +76,10 @@ class guild(commands.Cog):
         Usage: `>total (guild name, Defy or Pace)`
         """
 
-        guild_data = await self.bot.db[guildname.lower()].find_one({})
+        accessguildname = guildname.lower()
+        dispguildname = guildname[0].upper() + guildname[1:].lower()
+
+        guild_data = await self.bot.db[accessguildname].find_one({})
 
         if guild_data is None:
             return await ctx.send("Please specify a guild- either Defy or Pace.")
@@ -93,11 +96,9 @@ class guild(commands.Cog):
         desc = ""
 
         for x in range(len(timeframes)):
-            desc += display_timeframes[x] + ' - **' + str(totals[timeframes[x]]) + "** Guild Exp"
+            desc += '*' + display_timeframes[x] + '* - **' + str(totals[timeframes[x]]) + "** Guild Exp\n"
 
-        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc)
-        embed.set_author(name=guildname + "total Guild Exp earned",
-                         icon_url="https://i.imgur.com/GMm53sH.png")
+        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title=":trophy: " + dispguildname + " total Guild Exp earned")
         await ctx.send(embed=embed)
 
 

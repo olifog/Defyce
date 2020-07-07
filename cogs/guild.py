@@ -26,8 +26,8 @@ class guild(commands.Cog):
         """
 
         titles = {
-            "week": "Top GEXP earned over the entire week",
-            "average": "Average GEXP earned per day"
+            "week": " top GEXP earned over the entire week",
+            "average": " average GEXP earned per day"
         }
 
         guild_data = await self.bot.db[guildname.lower()].find_one({})
@@ -65,7 +65,7 @@ class guild(commands.Cog):
             desc += "** Guild EXP\n"
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc)
-        embed.set_author(name=titles.get(timeframe, "Guild top EXP for " + dispday),
+        embed.set_author(name=titles.get(timeframe, guildname + " top EXP for " + dispday),
                          icon_url="https://i.imgur.com/GMm53sH.png")
         await ctx.send(embed=embed)
 

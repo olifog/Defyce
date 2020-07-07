@@ -15,7 +15,7 @@ class misc(commands.Cog):
     async def info(self, ctx):
         """
         Check the bot's ping, latency and info.
-        Usage: `h+info`
+        Usage: `>info`
         """
         process_time = round(((datetime.utcnow() - ctx.message.created_at).total_seconds()) * 1000)
 

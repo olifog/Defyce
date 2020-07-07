@@ -144,9 +144,9 @@ class guild(commands.Cog):
             out = ""
 
             if warranted > place:
-                out += "`" + player['name'] + "` - **PROMOTION*** from* " + player['rank'] + " *to* " + ranks[warranted]
+                out += "`" + player['name'] + "` - **PROMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
                 diff = player['weekexp'] - reqs[place]
-                out += ", above current requirements by **" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*'
+                out += "*, above current requirements by **" + str(diff) + "**xp *(" + str(player['weekexp']) + 'xp total)*'
             elif warranted == 0:
                 out += "`" + player['name'] + "` - **KICK**, only ***" + str(player['weekexp']) + "**xp* this week."
             else:

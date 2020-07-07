@@ -33,10 +33,10 @@ class Updater:
         guild = await self.hypixelapi.getGuild(name=name)
         guilddata = await self.db[name].find_one({})
 
-        update = {}
+        update = {'exp': guild.JSON['exp']}
 
         top = {'week': [], 'average': []}
-        total = {'week': 0, 'average': 0}
+        total = {'week': 0, 'average': 0, 'all': guild.JSON['exp']}
         days = []
         for x in range(7):
             d = (datetime.now(tz=self.est) - timedelta(days=x)).strftime("%Y-%m-%d")

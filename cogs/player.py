@@ -83,7 +83,7 @@ class player(commands.Cog):
 
         await msg.edit(content=f"*Unverifying your account, `{player['displayname']}`...*")
 
-        await self.bot.db.verified.update_one({'_id': player['_id']}, {'remove': True})
+        await self.bot.db.verified.update_one({'_id': player['_id']}, {'$set': {'remove': True}})
         await msg.edit(content=f"**Unverified your account, `{player['displayname']}`!**")
 
 

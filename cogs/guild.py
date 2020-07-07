@@ -154,7 +154,14 @@ class guild(commands.Cog):
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc,
                               title=dispguildname + " Guild rank checks")
-        await staff_chat.send(embed=embed)
+        try:
+            await staff_chat.send(embed=embed)
+        except discord.errors.HTTPException:
+            embed = discord.Embed(description=desc[:5500],title=dispguildname + " Guild rank checks")
+            await staff_chat.send(embed=embed)
+            embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc[5500:])
+            await staff_chat.send(embed=embed)
+
 
     @exprequirements.before_loop
     async def expreqwaiter(self):

@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import discord
 from discord.ext import commands
 import operator
+from bisect import bisect
 
 
 class guild(commands.Cog):
@@ -104,6 +105,69 @@ class guild(commands.Cog):
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title="<:top:730049558327066694> " + dispguildname + " total Guild Exp earned")
         await ctx.send(embed=embed)
 
+    @tasks.loop(hours=168)
+    async def exprequirements(self):
+        await self.guildreqs('Defy')
+        await self.guildreqs('Pace')
+
+    async def guildreqs(self, guildname):
+        accessguildname = guildname.lower()
+        dispguildname = guildname[0].upper() + guildname[1:].lower()
+        staff_chat = self.bot.get_channel(728665978682212382)
+
+        guild_data = await self.bot.db[accessguildname].find_one({})
+
+        ranks = ['Kick', 'Member', 'Veteran', 'Elite']
+        exempt = ['Guild Master', 'Co Owner']
+        reqs = [150000, 250000, 350000]
+
+        desc = ""
+
+        for player in guild_data['members']:
+            if player['rank'] in exempt:
+                continue
+
+            rank = player['rank']
+
+            if rank == 'Officer':
+                rank = 'Elite'
+
+            warranted = bisect(reqs, player['weekexp'])
+            try:
+                place = ranks.index(rank)
+            except ValueError:
+                continue
+
+            if warranted == place:
+                continue
+
+            if warranted > place:
+                desc += "**" + player['name'] + "** - *Promotion from* " + player['rank'] + " *to* " + ranks[warranted]
+                diff = player['weekexp'] - reqs[place]
+                desc += "*, above current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n\n'
+            elif warranted == 0:
+                desc += "**" + player['name'] + "** - *Needs to be kicked, low XP; only* **" + str(player['weekexp']) + "** *this week.*\n\n"
+            else:
+                desc += "**" + player['name'] + "** - *Demotion from* " + player['rank'] + " *to* " + ranks[warranted]
+                diff = reqs[place] - player['weekexp']
+                desc += "*, below current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n\n'
+
+        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc,
+                              title=dispguildname + " Guild rank checks")
+        await staff_chat.send(embed=embed)
+
+    @exprequirements.before_loop
+    async def expreqwaiter(self):
+        d = datetime.now(tz=self.bot.est)
+        next_monday = d + timedelta(7 - d.weekday())
+        sunday_night = next_monday - timedelta(minutes=1)
+
+        await discord.utils.sleep_until(sunday_night)
+
+    @commands.command()
+    async def forcereqs(self, guildname):
+        await self.guildreqs(guildname)
+
     @commands.command(brief="Check players under/above a certain weekly gexp threshold")
     async def check(self, ctx, guildname, operand, threshold, rank: typing.Optional[str]=""):
         """
@@ -129,14 +193,14 @@ class guild(commands.Cog):
         count = 0
 
         for member in guild_data['members']:
-            if (rank == "" or rank == member['rank']) and operand(member['weekexp'], int(threshold)):
+            if (rank == "" or rank.lower() == member['rank'].lower()) and operand(member['weekexp'], int(threshold)):
                 count += 1
                 desc += member['name'] + ", *" + member['rank'] + "* | **" + '{:,}'.format(member['weekexp']) + "** XP ("
 
                 if operand == operator.gt:
                     desc += "+" + str(member['weekexp'] - int(threshold)) + ")"
                 else:
-                    desc += "-" + str(member['weekexp'] - int(threshold)) + ")"
+                    desc += "-" + str(int(threshold) - member['weekexp']) + ")"
 
                 desc += "\n"
 

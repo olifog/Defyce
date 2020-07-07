@@ -97,7 +97,7 @@ class guild(commands.Cog):
         desc = ""
 
         for x in range(len(timeframes)):
-            desc += '*' + display_timeframes[x] + '* - **' + str(totals[timeframes[x]]) + "** Guild Exp\n"
+            desc += '*' + display_timeframes[x] + '* - **' + str(round(totals[timeframes[x]])) + "** Guild Exp\n"
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title="<:top:730049558327066694> " + dispguildname + " total Guild Exp earned")
         await ctx.send(embed=embed)

@@ -25,12 +25,15 @@ class guild(commands.Cog):
         - days ago, a number from `1`-`6` - displays the GEXP leaderboard for the specified day
         """
 
+        accessguildname = guildname.lower()
+        dispguildname = guildname[0].upper() + guildname[1:].lower()
+
         titles = {
             "week": " top GEXP earned over the entire week",
             "average": " average GEXP earned per day"
         }
 
-        guild_data = await self.bot.db[guildname.lower()].find_one({})
+        guild_data = await self.bot.db[accessguildname].find_one({})
 
         if guild_data is None:
             return await ctx.send("Please specify a guild- either Defy or Pace.")
@@ -38,7 +41,7 @@ class guild(commands.Cog):
         try:
             d = datetime.now(tz=self.bot.est) - timedelta(days=int(timeframe))
             timeframe = d.strftime("%Y-%m-%d")
-            dispday = d.strftime("%m/%d/%Y")
+            dispday = d.strftime("%d %b")
         except Exception:
             dispday = "ERROR"
 
@@ -64,9 +67,7 @@ class guild(commands.Cog):
             desc += str(round(player['xp']))
             desc += "** Guild EXP\n"
 
-        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc)
-        embed.set_author(name=titles.get(timeframe, guildname + " top EXP for " + dispday),
-                         icon_url="https://i.imgur.com/GMm53sH.png")
+        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title="<:top:730049558327066694> " + dispguildname + titles.get(timeframe, " top EXP for " + dispday))
         await ctx.send(embed=embed)
 
     @commands.command(brief="Guild total Exp earned (past week)")
@@ -84,12 +85,12 @@ class guild(commands.Cog):
         if guild_data is None:
             return await ctx.send("Please specify a guild- either Defy or Pace.")
 
-        display_timeframes = ['All-time', 'Total week', 'Average per day']
+        display_timeframes = ['All-time', 'Total this week', 'Average per day']
         timeframes = ['all', 'week', 'average']
         for x in range(7):
             d = (datetime.now(tz=self.bot.est) - timedelta(days=x))
             timeframes.append(d.strftime("%Y-%m-%d"))
-            display_timeframes.append(d.strftime("%m/%d/%Y"))
+            display_timeframes.append(d.strftime("%d %b"))
 
         totals = guild_data['total']
 
@@ -98,7 +99,7 @@ class guild(commands.Cog):
         for x in range(len(timeframes)):
             desc += '*' + display_timeframes[x] + '* - **' + str(totals[timeframes[x]]) + "** Guild Exp\n"
 
-        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title=":trophy: " + dispguildname + " total Guild Exp earned")
+        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title="<:top:730049558327066694> " + dispguildname + " total Guild Exp earned")
         await ctx.send(embed=embed)
 
 

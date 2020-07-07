@@ -129,14 +129,14 @@ class guild(commands.Cog):
         count = 0
 
         for member in guild_data['members']:
-            if (rank == "" or rank == member['rank']) and operand(member['weekexp'], threshold):
+            if (rank == "" or rank == member['rank']) and operand(member['weekexp'], int(threshold)):
                 count += 1
                 desc += member['name'] + ", *" + member['rank'] + "* | **" + '{:,}'.format(member['weekexp']) + "** XP ("
 
                 if operand == operator.gt:
-                    desc += "+" + str(member['weekexp'] - threshold) + ")"
+                    desc += "+" + str(member['weekexp'] - int(threshold)) + ")"
                 else:
-                    desc += "-" + str(member['weekexp'] - threshold) + ")"
+                    desc += "-" + str(member['weekexp'] - int(threshold)) + ")"
 
                 desc += "\n"
 

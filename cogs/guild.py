@@ -121,7 +121,7 @@ class guild(commands.Cog):
         exempt = ['Guild Master', 'Co Owner']
         reqs = [150000, 250000, 350000]
 
-        desc = ""
+        results = []
 
         for player in guild_data['members']:
             if player['rank'] in exempt:
@@ -141,26 +141,27 @@ class guild(commands.Cog):
             if warranted == place:
                 continue
 
-            if warranted > place:
-                desc += "**" + player['name'] + "** - *PROMOTION from* " + player['rank'] + " *to* " + ranks[warranted]
-                diff = player['weekexp'] - reqs[place]
-                desc += "*, above current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n'
-            elif warranted == 0:
-                desc += "**" + player['name'] + "** - *KICK, low XP; only* **" + str(player['weekexp']) + "** *this week.*\n"
-            else:
-                desc += "**" + player['name'] + "** - *DEMOTION from* " + player['rank'] + " *to* " + ranks[warranted]
-                diff = reqs[place] - player['weekexp']
-                desc += "*, below current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*\n'
+            out = ""
 
-        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc,
-                              title=dispguildname + " Guild rank checks")
-        try:
+            if warranted > place:
+                out += "**" + player['name'] + "** - *PROMOTION from* " + player['rank'] + " *to* " + ranks[warranted]
+                diff = player['weekexp'] - reqs[place]
+                out += "*, above current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*'
+            elif warranted == 0:
+                out += "**" + player['name'] + "** - *KICK, low XP; only* **" + str(player['weekexp']) + "** *this week.*"
+            else:
+                out += "**" + player['name'] + "** - *DEMOTION from* " + player['rank'] + " *to* " + ranks[warranted]
+                diff = reqs[place] - player['weekexp']
+                out += "*, below current requirements by ***" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*'
+
+            results.append(out)
+
+        await staff_chat.send(dispguildname + " Guild rank checks")
+        await staff_chat.send(len(results))
+
+        for x in range((len(results)//25)+1):
+            embed = discord.Embed(description='\n'.join(results[x*25:(x+1)*25]))
             await staff_chat.send(embed=embed)
-        except discord.errors.HTTPException:
-            await staff_chat.send(dispguildname + " Guild rank checks")
-            for x in range(len(desc)//2048):
-                embed = discord.Embed(description=desc[x*2048:(x+1)*2048])
-                await staff_chat.send(embed=embed)
 
 
     @exprequirements.before_loop

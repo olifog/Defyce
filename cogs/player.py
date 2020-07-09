@@ -128,14 +128,20 @@ class player(commands.Cog):
         except:
             pass
 
+        try:
+            online = player.JSON['lastLogout'] < player.JSON['lastLogin']
+        except:
+            online = False
+
         if player.JSON['online']:
             statusimg = "https://i.imgur.com/0LNiVAV.png"
         else:
-            lastlogin = datetime.fromtimestamp(player.JSON['lastLogin'] / 1000.0, tz=self.est)
-            ago = datetime.now(tz=self.est) - lastlogin
-
-            desc += "*Last Login:* `" + lastlogin.strftime("%m/%d/%Y") + "` (" + humanize.naturaltime(ago) + ")\n\n"
             statusimg = "https://webkit.org/blog-files/color-gamut/Webkit-logo-P3.png"
+
+        lastlogin = datetime.fromtimestamp(player.JSON['lastLogin'] / 1000.0, tz=self.est)
+        ago = datetime.now(tz=self.est) - lastlogin
+
+        desc += "*Last Login:* `" + lastlogin.strftime("%m/%d/%Y") + "` (" + humanize.naturaltime(ago) + ")\n\n"
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.est), description=desc)
         embed.set_thumbnail(url=self.images[rank])

@@ -155,8 +155,8 @@ class player(commands.Cog):
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc)
         embed.set_thumbnail(url=self.images[rank])
 
-        full_render = await self.bot.get_pic("https://visage.surgeplay.com/full/256/" + user_uuid, 'full.png')
-        face_render = await self.bot.get_pic("https://visage.surgeplay.com/face/" + user_uuid, 'face.png')
+        full_render = await self.bot.get_pic("https://visage.surgeplay.com/full/256/" + player.UUID, 'full.png')
+        face_render = await self.bot.get_pic("https://visage.surgeplay.com/face/" + player.UUID, 'face.png')
 
         embed.set_image(url="attachment://full.png")
         embed.set_author(name=rank + player.getName(),

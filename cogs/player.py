@@ -133,7 +133,7 @@ class player(commands.Cog):
         except:
             online = False
 
-        if player.JSON['online']:
+        if online:
             statusimg = "https://i.imgur.com/0LNiVAV.png"
         else:
             statusimg = "https://webkit.org/blog-files/color-gamut/Webkit-logo-P3.png"

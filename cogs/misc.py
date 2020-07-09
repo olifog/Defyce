@@ -37,6 +37,11 @@ class misc(commands.Cog):
         e.set_thumbnail(url=ctx.me.avatar_url)
         await ctx.send(embed=e)
 
+    @commands.command()
+    async def resetnicks(self, ctx):
+        for member in ctx.guild.members:
+            await member.edit(nick=member.name)
+
 
 def setup(bot):
     bot.add_cog(misc(bot))

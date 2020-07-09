@@ -76,46 +76,49 @@ class server(commands.Cog):
     @tasks.loop(seconds=1)
     async def update_next_member(self):
         try:
-            player = self.queue[0]
-        except IndexError:
-            cursor = self.bot.db.verified.find({})
-            self.queue = await cursor.to_list(length=250)
-            return
+            try:
+                player = self.queue[0]
+            except IndexError:
+                cursor = self.bot.db.verified.find({})
+                self.queue = await cursor.to_list(length=250)
+                return
 
-        duser = self.bot.guild.get_member(player['discordid'])
+            duser = self.bot.guild.get_member(player['discordid'])
 
-        newroles = await self.strip_applicables(duser.roles)
+            newroles = await self.strip_applicables(duser.roles)
 
-        if player.get('remove', False) is True:
-            newnick = duser.name
-            newroles.append(self.bot.guild.get_role(self.guest))
-            await self.bot.db.verified.delete_many({'_id': player['_id']})
-        else:
-            pdata = await self.bot.hypixelapi.getPlayer(uuid=player['uuid'])
+            if player.get('remove', False) is True:
+                newnick = duser.name
+                newroles.append(self.bot.guild.get_role(self.guest))
+                await self.bot.db.verified.delete_many({'_id': player['_id']})
+            else:
+                pdata = await self.bot.hypixelapi.getPlayer(uuid=player['uuid'])
+
+                try:
+                    online = pdata.JSON['lastLogout'] < pdata.JSON['lastLogin']
+                except KeyError:
+                    online = False
+
+                await self.bot.db.verified.update_one({'_id': player['_id']}, {"$set": {"displayname": pdata.getName(), "online": online}})
+
+                newnick = pdata.getName() + " [" + str(round(pdata.getLevel(), 2)) + "]"
+
+                try:
+                    newroles.append(self.bot.guild.get_role(self.hypixelroles[pdata.getRank()]))
+                except KeyError:
+                    pass
+
+                try:
+                    newroles.append(self.bot.guild.get_role(self.guildroles[player['guildrank']]))
+                except KeyError:
+                    pass
 
             try:
-                online = pdata.JSON['lastLogout'] < pdata.JSON['lastLogin']
-            except KeyError:
-                online = False
-
-            await self.bot.db.verified.update_one({'_id': player['_id']}, {"$set": {"displayname": pdata.getName(), "online": online}})
-
-            newnick = pdata.getName() + " [" + str(round(pdata.getLevel(), 2)) + "]"
-
-            try:
-                newroles.append(self.bot.guild.get_role(self.hypixelroles[pdata.getRank()]))
-            except KeyError:
+                await duser.edit(nick=newnick, roles=newroles)
+            except discord.errors.Forbidden:
                 pass
-
-            try:
-                newroles.append(self.bot.guild.get_role(self.guildroles[player['guildrank']]))
-            except KeyError:
-                pass
-
-        try:
-            await duser.edit(nick=newnick, roles=newroles)
-        except discord.errors.Forbidden:
-            pass
+        except Exception as e:
+            print(e)
 
 
 

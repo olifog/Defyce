@@ -123,7 +123,7 @@ class player(commands.Cog):
         desc += "*Karma:* `" + str(player.JSON['karma']) + "`\n"
 
         try:
-            firstlogin = datetime.fromtimestamp(player.JSON['firstLogin'] / 1000.0, tz=self.est)
+            firstlogin = datetime.fromtimestamp(player.JSON['firstLogin'] / 1000.0, tz=self.bot.est)
             desc += "*First Login:* `" + firstlogin.strftime("%m/%d/%Y") + "`\n"
         except:
             pass
@@ -138,12 +138,12 @@ class player(commands.Cog):
         else:
             statusimg = "https://webkit.org/blog-files/color-gamut/Webkit-logo-P3.png"
 
-        lastlogin = datetime.fromtimestamp(player.JSON['lastLogin'] / 1000.0, tz=self.est)
-        ago = datetime.now(tz=self.est) - lastlogin
+        lastlogin = datetime.fromtimestamp(player.JSON['lastLogin'] / 1000.0, tz=self.bot.est)
+        ago = datetime.now(tz=self.bot.est) - lastlogin
 
         desc += "*Last Login:* `" + lastlogin.strftime("%m/%d/%Y") + "` (" + humanize.naturaltime(ago) + ")\n\n"
 
-        embed = discord.Embed(timestamp=datetime.now(tz=self.est), description=desc)
+        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc)
         embed.set_thumbnail(url=self.images[rank])
 
         full_render = await self.bot.get_pic("https://visage.surgeplay.com/full/256/" + user_uuid, 'full.png')

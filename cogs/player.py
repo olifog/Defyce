@@ -4,6 +4,7 @@ import datetime
 
 from extras.hypixel import PlayerNotFoundException, GuildNotFoundException
 from discord.ext import commands
+import typing
 
 
 class player(commands.Cog):

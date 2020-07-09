@@ -75,11 +75,6 @@ class Defyce(commands.Bot):
             except:
                 self.logger.critical(f"{ext} failed:\n{traceback.format_exc()}")
 
-    async def get_pic(self, url, filename='picture.png'):
-        async with self.session.get(url) as rsp:
-            init_bytes = await rsp.read()
-        return discord.File(BytesIO(init_bytes), filename=filename)
-
     def run(self):
         super().run(self.settings['discord_token'])
 

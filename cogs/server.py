@@ -98,7 +98,7 @@ class server(commands.Cog):
             except KeyError:
                 online = False
 
-            await self.bot.db.verified.update_one({'_id': player['_id']}, {"displayname": pdata.getName(), "online": online})
+            await self.bot.db.verified.update_one({'_id': player['_id']}, {"$set": {"displayname": pdata.getName(), "online": online}})
 
             newnick = pdata.getName() + " [" + str(round(pdata.getLevel(), 2)) + "]"
 

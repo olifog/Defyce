@@ -3,6 +3,7 @@ from datetime import datetime
 import discord
 import humanize
 from discord.ext import commands
+import json
 
 
 class misc(commands.Cog):
@@ -38,24 +39,14 @@ class misc(commands.Cog):
         await ctx.send(embed=e)
 
     @commands.command()
-    async def load_users_from_hplus(self, ctx):
-        hplus = self.bot.motor_client.hypixelPlusDB
+    async def load_users_from_deprived(self, ctx):
+        data = json.load(open('data.json', 'r'))
 
-        async for player in hplus.players.find({}):
-            doc = {"discordid": player['discordid'],
-                   "uuid": player['uuid'],
-                   "displayname": player['displayname']}
-            await self.bot.db.verified.insert_one(doc)
+        for member, d in data['verified_members'].items():
+            test = await self.bot.db.verified.find_one({'uuid': member})
 
-        await ctx.send("Loaded")
-
-    @commands.command()
-    async def resetnicks(self, ctx):
-        for member in ctx.guild.members:
-            try:
-                await member.edit(nick=member.name)
-            except Exception:
-                pass
+            if test is None:
+                await self.bot.db.verified.insert_one({'uuid': member, 'displayname': d['ign'], 'discordid': d['discordid']})
 
 
 def setup(bot):

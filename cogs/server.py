@@ -11,7 +11,8 @@ class server(commands.Cog):
         self.bot = bot
         self.queue = []
 
-        self.guildroles = {"Officer": 637490030834745355,
+        self.guildroles = {"Co Owner": 655874124870320138,
+                           "Officer": 637490030834745355,
                            "Veteran": 729696584744435823,
                            "Elite": 637490560726204417,
                            "Member": 678462346577969202}
@@ -39,9 +40,10 @@ class server(commands.Cog):
     async def on_member_join(self, member):
         wchan = self.bot.guild.get_channel(728665600683147315)
 
-        desc = "Head over to <#678442072755273749> to verify yourself!\n\n"
-        desc += "Please follow all our rules at <#672565003420958723>\n"
-        desc += "Read the news in <#672565239476256781>"
+
+        desc = "Please follow all our rules at <#728664094680285305>\n"
+        desc += "Read the news in <#728664124694986853>\n\n"
+        desc = "Head over to <#728665440816988251> to verify yourself!"
 
         embed = discord.Embed(timestamp=datetime.utcnow(), description=desc)
         embed.set_author(name="Welcome to the server!",

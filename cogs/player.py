@@ -1,6 +1,6 @@
 import asyncio
 import base64
-import datetime
+from datetime import datetime
 
 from extras.hypixel import PlayerNotFoundException, GuildNotFoundException
 from discord.ext import commands

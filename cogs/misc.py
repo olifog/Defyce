@@ -38,9 +38,16 @@ class misc(commands.Cog):
         await ctx.send(embed=e)
 
     @commands.command()
-    async def resetnicks(self, ctx):
-        for member in ctx.guild.members:
-            await member.edit(nick=member.name)
+    async def load_users_from_hplus(self, ctx):
+        hplus = self.bot.motor_client.hypixelPlusDB
+
+        async for player in hplus.players.find({}):
+            doc = {"discordid": player['discordid'],
+                   "uuid": player['uuid'],
+                   "displayname": player['displayname']}
+            await self.bot.db.insert_one(doc)
+
+        await ctx.send("Loaded")
 
 
 def setup(bot):

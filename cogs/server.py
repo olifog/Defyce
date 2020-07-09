@@ -86,7 +86,7 @@ class server(commands.Cog):
 
         newroles = await self.strip_applicables(duser.roles)
 
-        if player['remove'] is True:
+        if player.get('remove', False) is True:
             newnick = duser.name
             newroles.append(self.bot.guild.get_role(self.guest))
             await self.bot.db.verified.delete_many({'_id': player['_id']})

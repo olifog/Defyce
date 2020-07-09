@@ -75,18 +75,15 @@ class server(commands.Cog):
 
     @tasks.loop(seconds=1)
     async def update_next_member(self):
-        print("Iter")
         try:
             try:
-                player = self.queue[0]
+                player = self.queue.pop(0)
             except IndexError:
                 cursor = self.bot.db.verified.find({})
                 self.queue = await cursor.to_list(length=250)
                 return
 
             duser = self.bot.guild.get_member(player['discordid'])
-
-            print(duser)
 
             newroles = await self.strip_applicables(duser.roles)
 

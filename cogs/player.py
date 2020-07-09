@@ -6,6 +6,7 @@ from extras.hypixel import PlayerNotFoundException, GuildNotFoundException
 from discord.ext import commands
 import typing
 import humanize
+import discord
 
 
 class player(commands.Cog):

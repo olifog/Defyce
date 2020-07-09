@@ -33,6 +33,8 @@ class server(commands.Cog):
         for role in self.hypixelroles.values():
             self.applicables.append(role)
 
+        self.update_next_member.start()
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         wchan = self.bot.guild.get_channel(728665600683147315)
@@ -78,6 +80,8 @@ class server(commands.Cog):
             self.queue = await cursor.to_list(length=250)
             return
 
+        print(player)
+
         duser = self.bot.guild.get_member(player['discordid'])
 
         newroles = await self.strip_applicables(duser.roles)
@@ -108,7 +112,10 @@ class server(commands.Cog):
             except KeyError:
                 pass
 
-        await duser.edit(nick=newnick, roles=newroles)
+        try:
+            await duser.edit(nick=newnick, roles=newroles)
+        except discord.errors.Forbidden:
+            pass
 
 
 

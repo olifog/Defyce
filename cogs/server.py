@@ -82,8 +82,6 @@ class server(commands.Cog):
             self.queue = await cursor.to_list(length=250)
             return
 
-        print(player)
-
         duser = self.bot.guild.get_member(player['discordid'])
 
         newroles = await self.strip_applicables(duser.roles)

@@ -104,7 +104,11 @@ class server(commands.Cog):
                 pass
 
             try:
-                newroles.append(self.bot.guild.get_role(self.guildroles[pdata.JSON[]]))
+                newroles.append(self.bot.guild.get_role(self.guildroles[player['guildrank']]))
+            except KeyError:
+                pass
+
+        await duser.edit(nick=newnick, roles=newroles)
 
 
 

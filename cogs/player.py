@@ -86,6 +86,71 @@ class player(commands.Cog):
         await self.bot.db.verified.update_one({'_id': player['_id']}, {'$set': {'remove': True}})
         await msg.edit(content=f"**Unverified your account, `{player['displayname']}`!**")
 
+    @commands.command()
+    async def profile(self, ctx, user: typing.Optional[str]):
+        """Profile command"""
+
+        if user is None or user.startswith('@'):
+            if user is None:
+                user = ctx.author
+            else:
+                user = ctx.message.mentions[0]
+
+            pdata = await self.bot.db.verified.find_one({'discordid': user.id})
+
+            if pdata is None:
+                return await ctx.send("Sorry, user not verified! Use `>profile ign` to see any mc user's profile.")
+
+            user = pdata['displayname']
+
+
+        player = await self.bot.hypixelapi.getPlayer(name=user)
+
+        rank = player.getRank()
+
+        if rank:
+            rank = "[" + rank + "] "
+        else:
+            rank = ""
+
+        desc = "__**Stats**__\n"
+        desc += "*Level:* `" + str(round(player.getLevel(), 2)) + "`\n"
+        try:
+            desc += "*MC Version:* `" + player.JSON['mcVersionRp'] + '`\n'
+        except:
+            pass
+        desc += "*Karma:* `" + str(player.JSON['karma']) + "`\n"
+
+        try:
+            firstlogin = datetime.fromtimestamp(player.JSON['firstLogin'] / 1000.0, tz=self.est)
+            desc += "*First Login:* `" + firstlogin.strftime("%m/%d/%Y") + "`\n"
+        except:
+            pass
+
+        if player.JSON['online']:
+            statusimg = "https://i.imgur.com/0LNiVAV.png"
+        else:
+            lastlogin = datetime.fromtimestamp(player.JSON['lastLogin'] / 1000.0, tz=self.est)
+            ago = datetime.now(tz=self.est) - lastlogin
+
+            desc += "*Last Login:* `" + lastlogin.strftime("%m/%d/%Y") + "` (" + humanize.naturaltime(ago) + ")\n\n"
+            statusimg = "https://webkit.org/blog-files/color-gamut/Webkit-logo-P3.png"
+
+        embed = discord.Embed(timestamp=datetime.now(tz=self.est), description=desc)
+        embed.set_thumbnail(url=self.images[rank])
+
+        full_render = await self.bot.get_pic("https://visage.surgeplay.com/full/256/" + user_uuid, 'full.png')
+        face_render = await self.bot.get_pic("https://visage.surgeplay.com/face/" + user_uuid, 'face.png')
+
+        embed.set_image(url="attachment://full.png")
+        embed.set_author(name=rank + player.getName(),
+                         url="https://hypixel.net/player/" + player.getName(),
+                         icon_url="attachment://face.png")
+        embed.set_footer(text="Defyce Guild",
+                         icon_url=statusimg)
+
+        await ctx.send(embed=embed, files=[full_render, face_render])
+
 
 def setup(bot):
     bot.add_cog(player(bot))

@@ -15,6 +15,13 @@ class player(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+        self.images = {'MVP++': "https://i.imgur.com/piZBayK.png",
+                       "MVP+": "https://i.imgur.com/K01LqaX.png",
+                       "MVP": "https://i.imgur.com/ErJr6vy.png",
+                       "VIP+": "https://i.imgur.com/wOzD3Qd.png",
+                       "VIP": "https://i.imgur.com/cRj2FM2.png",
+                       None: "https://user-images.githubusercontent.com/49322497/70186527-61601080-16ec-11ea-8e0e-49c0f5e4edde.png"}
+
     @commands.command(brief="Verifying your account")
     async def verify(self, ctx, ign):
         """

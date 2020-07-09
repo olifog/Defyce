@@ -45,7 +45,7 @@ class misc(commands.Cog):
             doc = {"discordid": player['discordid'],
                    "uuid": player['uuid'],
                    "displayname": player['displayname']}
-            await self.bot.db.insert_one(doc)
+            await self.bot.db.verified.insert_one(doc)
 
         await ctx.send("Loaded")
 

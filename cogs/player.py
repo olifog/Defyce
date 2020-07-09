@@ -5,6 +5,7 @@ from datetime import datetime
 from extras.hypixel import PlayerNotFoundException, GuildNotFoundException
 from discord.ext import commands
 import typing
+import humanize
 
 
 class player(commands.Cog):

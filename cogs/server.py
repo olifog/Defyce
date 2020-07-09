@@ -94,7 +94,7 @@ class server(commands.Cog):
             pdata = await self.bot.hypixelapi.getPlayer(uuid=player['uuid'])
 
             try:
-                online = pdata['lastLogout'] < pdata['lastLogin']
+                online = pdata.JSON['lastLogout'] < pdata.JSON['lastLogin']
             except KeyError:
                 online = False
 

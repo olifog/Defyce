@@ -85,6 +85,9 @@ class server(commands.Cog):
 
             duser = self.bot.guild.get_member(player['discordid'])
 
+            if duser is None:
+                return await self.bot.db.verified.delete_many({'_id': player['_id']})
+
             newroles = await self.strip_applicables(duser.roles)
 
             if player.get('remove', False) is True:

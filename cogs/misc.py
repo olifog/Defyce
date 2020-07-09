@@ -38,16 +38,6 @@ class misc(commands.Cog):
         e.set_thumbnail(url=ctx.me.avatar_url)
         await ctx.send(embed=e)
 
-    @commands.command()
-    async def load_users_from_deprived(self, ctx):
-        data = json.load(open('data.json', 'r'))
-
-        for member, d in data['verified_members'].items():
-            test = await self.bot.db.verified.find_one({'uuid': member})
-
-            if test is None:
-                await self.bot.db.verified.insert_one({'uuid': member, 'displayname': d['ign'], 'discordid': d['discordid']})
-
 
 def setup(bot):
     bot.add_cog(misc(bot))

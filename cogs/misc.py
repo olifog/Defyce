@@ -49,6 +49,14 @@ class misc(commands.Cog):
 
         await ctx.send("Loaded")
 
+    @commands.command()
+    async def resetnicks(self, ctx):
+        for member in ctx.guild.members:
+            try:
+                await member.edit(nick=member.name)
+            except Exception:
+                pass
+
 
 def setup(bot):
     bot.add_cog(misc(bot))

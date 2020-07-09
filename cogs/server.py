@@ -43,7 +43,7 @@ class server(commands.Cog):
 
         desc = "Please follow all our rules at <#728664094680285305>\n"
         desc += "Read the news in <#728664124694986853>\n\n"
-        desc = "Head over to <#728665440816988251> to verify yourself!"
+        desc += "Head over to <#728665440816988251> to verify yourself!"
 
         embed = discord.Embed(timestamp=datetime.utcnow(), description=desc)
         embed.set_author(name="Welcome to the server!",

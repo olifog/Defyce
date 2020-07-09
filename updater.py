@@ -59,7 +59,7 @@ class Updater:
             if verified is not None:
                 p['player'] = verified['displayname']
                 p['discord'] = verified['discordid']
-                await self.db.verified.update_one({'_id': verified['_id']}, {'$set': {'guildExp': newExpHistory, 'guild': name}})
+                await self.db.verified.update_one({'_id': verified['_id']}, {'$set': {'guildExp': newExpHistory, 'guild': name, 'guildrank': member['rank']}})
             else:
                 get_from_api = True
                 try:

@@ -97,7 +97,7 @@ class Updater:
 
         async for player in self.db.verified.find({'guild': name}):
             if player['uuid'] not in memberlist:
-                await self.db.verified.update_one({'_id': player['_id']}, {'remove': True})
+                await self.db.verified.update_one({'_id': player['_id']}, {"$set": {'remove': True}})
 
         await self.db[name].update_one({'_id': guilddata['_id']}, {'$set': update})
 

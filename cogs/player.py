@@ -167,6 +167,58 @@ class player(commands.Cog):
 
         await ctx.send(embed=embed, files=[full_render, face_render])
 
+    @commands.command()
+    async def xp(self, ctx, user: typing.Optional[str]):
+        if user is None or user.startswith('@'):
+            if user is None:
+                user = ctx.author
+            else:
+                user = ctx.message.mentions[0]
+
+            pdata = await self.bot.db.verified.find_one({'discordid': user.id})
+
+            if pdata is None:
+                return await ctx.send("Sorry, user not verified! Use `>xp ign` to see any guild member's xp")
+
+            user = pdata['displayname']
+
+        xplist = None
+
+        defy = self.bot.db.defy.find_one({})
+        for member in defy['members']:
+            if member['name'] == user:
+                xplist = member['exphistory']
+
+        if xplist is None:
+            pace = self.bot.db.pace.find_one({})
+            for member in pace['members']:
+                if member['name'] == user:
+                    xplist = member['exphistory']
+
+        if xplist is None:
+            return await ctx.send("Sorry, that user is not in the guild.")
+
+        desc = ""
+        title = f"__{str(xplist['week'])} Guild EXP this week, {str(xplist['average'])} Guild EXP/Day on average__"
+
+        del xplist['week']
+        del xplist['average']
+
+        for day in xplist:
+            desc += day + "\t\t**" + str(xplist[day]) + "**\n"
+
+        embed = discord.Embed(timestamp=datetime.now(tz=self.est), description=desc, title=title)
+        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
+        embed.set_footer(text="Defy Guild",
+                         icon_url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
+
+
+        embed.set_author(name=user + "\'s XP",
+                            icon_url=self.bot.user.avatar_url_as(format="png"))
+        await ctx.send(embed=embed)
+
+
+
 
 def setup(bot):
     bot.add_cog(player(bot))

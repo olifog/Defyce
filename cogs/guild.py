@@ -130,7 +130,7 @@ class guild(commands.Cog):
 
             rank = player['rank']
 
-            warranted = bisect(reqs, player['weekexp'])
+            warranted = bisect(reqs, player['exphistory']['week'])
             try:
                 place = ranks.index(rank)
             except ValueError:
@@ -143,14 +143,17 @@ class guild(commands.Cog):
 
             if warranted > place:
                 out += "`" + player['name'] + "` - **PROMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
-                diff = player['weekexp'] - reqs[place]
-                out += "*, above current requirements by **" + str(diff) + "**xp *(" + str(player['weekexp']) + 'xp total)*'
+                diff = player['exphistory']['week'] - reqs[place]
+                out += "*, above current requirements by **" + str(diff) + "**xp *(" + str(player['exphistory']['week']) + 'xp total)*'
             elif warranted == 0:
-                out += "`" + player['name'] + "` - **KICK**, only ***" + str(player['weekexp']) + "**xp* this week."
+                out += "`" + player['name'] + "` - **KICK**, only ***" + str(player['exphistory']['week']) + "**xp* this week."
             else:
                 out += "`" + player['name'] + "` - **DEMOTION*** from* " + player['rank'] + " *to* " + ranks[warranted]
-                diff = reqs[place] - player['weekexp']
-                out += ", below current requirements by **" + str(diff) + "**XP *(" + str(player['weekexp']) + 'XP total)*'
+                diff = reqs[place] - player['exphistory']['week']
+                out += ", below current requirements by **" + str(diff) + "**XP *(" + str(player['exphistory']['week']) + 'XP total)*'
+
+            if datetime.now(tz=self.bot.est) - player['joined'] <= 604800:
+                out = "~~" + out + "~~"
 
             results.append(out)
 
@@ -198,15 +201,21 @@ class guild(commands.Cog):
         count = 0
 
         for member in guild_data['members']:
-            if (rank == "" or rank.lower() == member['rank'].lower()) and operand(member['weekexp'], int(threshold)):
+            if (rank == "" or rank.lower() == member['rank'].lower()) and operand(member['exphistory']['week'], int(threshold)):
+                if datetime.now(tz=self.est) - member['joined'] <= 604800:
+                    desc += "~~"
+
                 count += 1
                 desc += member['name'] + ", *" + member['rank'] + "* | **" + '{:,}'.format(
-                    member['weekexp']) + "** XP ("
+                    member['exphistory']['week']) + "** XP ("
 
                 if operand == operator.gt:
-                    desc += "+" + str(member['weekexp'] - int(threshold)) + ")"
+                    desc += "+" + str(member['exphistory']['week'] - int(threshold)) + ")"
                 else:
-                    desc += "-" + str(int(threshold) - member['weekexp']) + ")"
+                    desc += "-" + str(int(threshold) - member['exphistory']['week']) + ")"
+
+                if datetime.now(tz=self.est) - member['joined'] <= 604800:
+                    desc += "~~"
 
                 desc += "\n"
 

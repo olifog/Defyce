@@ -202,7 +202,7 @@ class guild(commands.Cog):
 
         for member in guild_data['members']:
             if (rank == "" or rank.lower() == member['rank'].lower()) and operand(member['exphistory']['week'], int(threshold)):
-                if datetime.now(tz=self.est) - member['joined'] <= 604800:
+                if datetime.now(tz=self.bot.est) - member['joined'] <= 604800:
                     desc += "~~"
 
                 count += 1
@@ -214,7 +214,7 @@ class guild(commands.Cog):
                 else:
                     desc += "-" + str(int(threshold) - member['exphistory']['week']) + ")"
 
-                if datetime.now(tz=self.est) - member['joined'] <= 604800:
+                if datetime.now(tz=self.bot.est) - member['joined'] <= 604800:
                     desc += "~~"
 
                 desc += "\n"

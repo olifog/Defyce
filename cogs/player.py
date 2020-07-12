@@ -184,13 +184,13 @@ class player(commands.Cog):
 
         xplist = None
 
-        defy = self.bot.db.defy.find_one({})
+        defy = await self.bot.db.defy.find_one({})
         for member in defy['members']:
             if member['name'] == user:
                 xplist = member['exphistory']
 
         if xplist is None:
-            pace = self.bot.db.pace.find_one({})
+            pace = await self.bot.db.pace.find_one({})
             for member in pace['members']:
                 if member['name'] == user:
                     xplist = member['exphistory']

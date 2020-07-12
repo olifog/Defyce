@@ -210,11 +210,11 @@ class player(commands.Cog):
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title=title)
         embed.set_thumbnail(url="https://visage.surgeplay.com/full/" + hyplayer.UUID)
-        embed.set_footer(text="Defy Guild",
-                         icon_url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
+        embed.set_footer(text="Defyce Guild",
+                         icon_url=self.bot.user.avatar_url_as(format="png"))
 
         embed.set_author(name=user + "\'s XP",
-                            icon_url=self.bot.user.avatar_url_as(format="png"))
+                            icon_url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
         await ctx.send(embed=embed)
 
 

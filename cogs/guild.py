@@ -117,9 +117,9 @@ class guild(commands.Cog):
 
         guild_data = await self.bot.db[accessguildname].find_one({})
 
-        ranks = ['Kick', 'Member', 'Veteran', 'Elite']
+        ranks = ['Kick', 'Member', 'Veteran', 'Elite', 'Officer']
         exempt = ['Guild Master', 'Co Owner']
-        reqs = [150000, 250000, 350000]
+        reqs = [50000, 150000, 250000, 350000]
 
         results = []
 
@@ -128,9 +128,6 @@ class guild(commands.Cog):
                 continue
 
             rank = player['rank']
-
-            if rank == 'Officer':
-                rank = 'Elite'
 
             warranted = bisect(reqs, player['weekexp'])
             try:

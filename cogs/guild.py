@@ -173,6 +173,47 @@ class guild(commands.Cog):
     async def forcereqs(self, ctx, guildname):
         await self.guildreqs(guildname)
 
+    @commands.command(brief="Check players under/above a certain weekly gexp threshold")
+    async def check(self, ctx, guildname, operand, threshold, rank: typing.Optional[str] = ""):
+        """
+        Displays all the users that are above/below the weekly threshold that you give.
+
+        Usage: `>check (guild name, Defy or Pace) (above/below) (threshold) [optional guild rank to isolate]`
+        """
+
+        accessguildname = guildname.lower()
+        dispguildname = guildname[0].upper() + guildname[1:].lower()
+
+        guild_data = await self.bot.db[accessguildname].find_one({})
+
+        if guild_data is None:
+            return await ctx.send("Please specify a guild- either Defy or Pace.")
+
+        if operand.lower() == 'above':
+            operand = operator.gt
+        else:
+            operand = operator.lt
+
+        desc = ""
+        count = 0
+
+        for member in guild_data['members']:
+            if (rank == "" or rank.lower() == member['rank'].lower()) and operand(member['weekexp'], int(threshold)):
+                count += 1
+                desc += member['name'] + ", *" + member['rank'] + "* | **" + '{:,}'.format(
+                    member['weekexp']) + "** XP ("
+
+                if operand == operator.gt:
+                    desc += "+" + str(member['weekexp'] - int(threshold)) + ")"
+                else:
+                    desc += "-" + str(int(threshold) - member['weekexp']) + ")"
+
+                desc += "\n"
+
+        embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc,
+                              title=dispguildname + " Exp check")
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(guild(bot))

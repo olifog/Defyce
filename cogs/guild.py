@@ -152,7 +152,7 @@ class guild(commands.Cog):
                 diff = reqs[place] - player['exphistory']['week']
                 out += ", below current requirements by **" + str(diff) + "**XP *(" + str(player['exphistory']['week']) + 'XP total)*'
 
-            if datetime.now(tz=self.bot.est) - player['joined'] <= 604800:
+            if datetime.now(tz=self.bot.est) - player['joined'].replace(tzinfo=self.bot.est) <= 604800:
                 out = "~~" + out + "~~"
 
             results.append(out)
@@ -202,7 +202,7 @@ class guild(commands.Cog):
 
         for member in guild_data['members']:
             if (rank == "" or rank.lower() == member['rank'].lower()) and operand(member['exphistory']['week'], int(threshold)):
-                if datetime.now(tz=self.bot.est) - member['joined'] <= 604800:
+                if datetime.now(tz=self.bot.est) - member['joined'].replace(tzinfo=self.bot.est) <= 604800:
                     desc += "~~"
 
                 count += 1
@@ -214,7 +214,7 @@ class guild(commands.Cog):
                 else:
                     desc += "-" + str(int(threshold) - member['exphistory']['week']) + ")"
 
-                if datetime.now(tz=self.bot.est) - member['joined'] <= 604800:
+                if datetime.now(tz=self.bot.est) - member['joined'].replace(tzinfo=self.bot.est) <= 604800:
                     desc += "~~"
 
                 desc += "\n"

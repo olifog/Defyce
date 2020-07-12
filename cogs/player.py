@@ -199,8 +199,8 @@ class player(commands.Cog):
         if xplist is None:
             return await ctx.send("Sorry, that user is not in the guild.")
 
-        desc = ""
-        title = f"__{str(xplist['week'])} Guild EXP this week, {str(round(xplist['average']))} Guild EXP/Day on average__"
+        desc = f"{str(round(xplist['average']))} Guild EXP/Day on average\n"
+        title = f"__{str(xplist['week'])} Guild EXP this week__"
 
         del xplist['week']
         del xplist['average']

@@ -12,6 +12,7 @@ class guild(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.exprequirements.start()
 
     @commands.command(brief="Guild top Exp")
     async def top(self, ctx, guildname, timeframe: typing.Optional[str] = "0"):

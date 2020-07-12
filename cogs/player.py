@@ -199,7 +199,7 @@ class player(commands.Cog):
             return await ctx.send("Sorry, that user is not in the guild.")
 
         desc = ""
-        title = f"__{str(xplist['week'])} Guild EXP this week, {str(xplist['average'])} Guild EXP/Day on average__"
+        title = f"__{str(xplist['week'])} Guild EXP this week, {str(round(xplist['average']))} Guild EXP/Day on average__"
 
         del xplist['week']
         del xplist['average']
@@ -208,13 +208,12 @@ class player(commands.Cog):
             desc += day + "\t\t**" + str(xplist[day]) + "**\n"
 
         embed = discord.Embed(timestamp=datetime.now(tz=self.bot.est), description=desc, title=title)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
-        embed.set_footer(text="Defy Guild",
-                         icon_url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
+        embed.set_thumbnail(url=self.bot.user.avatar_url_as(format="png"))
+        embed.set_footer(text="Defy Guild")
 
 
         embed.set_author(name=user + "\'s XP",
-                            icon_url=self.bot.user.avatar_url_as(format="png"))
+                            icon_url="https://cdn.discordapp.com/attachments/677996730741948431/678268510400544790/Screenshot_2020-02-14_at_19.36.43.png")
         await ctx.send(embed=embed)
 
 

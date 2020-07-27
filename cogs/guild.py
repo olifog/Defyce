@@ -159,8 +159,8 @@ class guild(commands.Cog):
 
         await staff_chat.send(dispguildname + " Guild rank checks")
 
-        for x in range((len(results)//25)+1):
-            embed = discord.Embed(description='\n'.join(results[x*25:(x+1)*25]))
+        for x in range((len(results)//24)+1):
+            embed = discord.Embed(description='\n'.join(results[x*24:(x+1)*24]))
             await staff_chat.send(embed=embed)
 
 

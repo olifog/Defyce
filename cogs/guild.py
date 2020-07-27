@@ -143,14 +143,14 @@ class guild(commands.Cog):
 
             if warranted > place:
                 out += "`" + player['name'] + "` - **PROMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
-                diff = player['exphistory']['week'] - reqs[place]
+                diff = player['exphistory']['week'] - reqs[place - 1]
                 out += "*, above current requirements by **" + str(diff) + "**xp *(" + str(player['exphistory']['week']) + 'xp total)*'
             elif warranted == 0:
                 out += "`" + player['name'] + "` - **KICK**, only ***" + str(player['exphistory']['week']) + "**xp* this week."
             else:
-                out += "`" + player['name'] + "` - **DEMOTION*** from* " + player['rank'] + " *to* " + ranks[warranted]
-                diff = reqs[place] - player['exphistory']['week']
-                out += ", below current requirements by **" + str(diff) + "**XP *(" + str(player['exphistory']['week']) + 'XP total)*'
+                out += "`" + player['name'] + "` - **DEMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
+                diff = reqs[place - 1] - player['exphistory']['week']
+                out += "*, below current requirements by **" + str(diff) + "**xp *(" + str(player['exphistory']['week']) + 'xp total)*'
 
             if (datetime.now(tz=self.bot.est) - player['joined'].replace(tzinfo=self.bot.est)).total_seconds() <= 604800:
                 out = "~~" + out + "~~"

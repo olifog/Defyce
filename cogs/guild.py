@@ -142,13 +142,13 @@ class guild(commands.Cog):
             out = ""
 
             if warranted > place:
-                out += "`" + player['name'] + "` - <:promote:732081493446361088> **PROMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
+                out += "<:promote:732081493446361088> `" + player['name'] + "` - **PROMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
                 diff = player['exphistory']['week'] - reqs[place - 1]
                 out += "*, above current requirements by **" + str(diff) + "**xp *(" + str(player['exphistory']['week']) + 'xp total)*'
             elif warranted == 0:
-                out += "`" + player['name'] + "` - <:kick:732081493207416924> **KICK**, only ***" + str(player['exphistory']['week']) + "**xp* this week."
+                out += "<:kick:732081493207416924> `" + player['name'] + "` - **KICK**, only ***" + str(player['exphistory']['week']) + "**xp* this week."
             else:
-                out += "`" + player['name'] + "` - <:demote:732081493089976351> **DEMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
+                out += "<:demote:732081493089976351> `" + player['name'] + "` - **DEMOTION** from *" + player['rank'] + "* to *" + ranks[warranted]
                 diff = reqs[place - 1] - player['exphistory']['week']
                 out += "*, below current requirements by **" + str(diff) + "**xp *(" + str(player['exphistory']['week']) + 'xp total)*'
 

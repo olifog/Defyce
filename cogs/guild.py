@@ -160,7 +160,9 @@ class guild(commands.Cog):
         await channel.send(dispguildname + " Guild rank checks")
 
         for x in range((len(results)//15)+1):
-            embed = discord.Embed(description='\n'.join(results[x*16:(x+1)*16]))
+            print('----------------------------------')
+            print('\n'.join(results[x*15:(x+1)*15]))
+            embed = discord.Embed(description='\n'.join(results[x*15:(x+1)*15]))
             await channel.send(embed=embed)
 
     @exprequirements.before_loop

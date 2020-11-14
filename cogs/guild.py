@@ -120,7 +120,7 @@ class guild(commands.Cog):
 
         ranks = ['Kick', 'Member', 'Veteran', 'Elite', 'Officer']
         exempt = ['Guild Master', 'Co Owner']
-        reqs = [50000, 150000, 250000, 350000]
+        reqs = [75000, 150000, 250000, 350000]
 
         results = []
 

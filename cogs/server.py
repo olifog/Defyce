@@ -83,7 +83,7 @@ class server(commands.Cog):
                 self.queue = await cursor.to_list(length=250)
                 return
 
-            duser = self.bot.guild.get_member(player['discordid'])
+            duser = await self.bot.guild.fetch_member(player['discordid'])
 
             if duser is None:
                 return await self.bot.db.verified.delete_many({'_id': player['_id']})

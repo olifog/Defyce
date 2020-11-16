@@ -40,8 +40,8 @@ class server(commands.Cog):
         wchan = self.bot.guild.get_channel(728665600683147315)
 
         desc = "Please follow all our rules at <#728664094680285305>\n"
-        desc += "Read the news in <#728664124694986853>\n\n"
-        desc += "Head over to <#728665440816988251> to verify yourself!"
+        desc += "Read the news in <#763496439128391700>\n\n"
+        desc += "Head over to <#772310297548685332> to verify yourself!"
 
         embed = discord.Embed(timestamp=datetime.utcnow(), description=desc)
         embed.set_author(name="Welcome to the server!",

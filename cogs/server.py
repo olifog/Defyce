@@ -17,7 +17,6 @@ class server(commands.Cog):
                            "Elite": 637490560726204417,
                            "Member": 678462346577969202}
 
-        self.verified = 637033088328663057
         self.guest = 678446619871543316
 
         self.hypixelroles = {"MVP++": 712315223070998564,
@@ -26,7 +25,7 @@ class server(commands.Cog):
                              "VIP+": 712315169954463796,
                              "VIP": 712315157719810118}
 
-        self.applicables = [self.guest, self.verified]
+        self.applicables = [self.guest]
 
         for role in self.guildroles.values():
             self.applicables.append(role)
@@ -39,7 +38,6 @@ class server(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         wchan = self.bot.guild.get_channel(728665600683147315)
-
 
         desc = "Please follow all our rules at <#728664094680285305>\n"
         desc += "Read the news in <#728664124694986853>\n\n"
@@ -83,7 +81,7 @@ class server(commands.Cog):
                 self.queue = await cursor.to_list(length=250)
                 return
 
-            duser = await self.bot.guild.fetch_member(player['discordid'])
+            duser = self.bot.guild.get_member(player['discordid'])
 
             if duser is None:
                 return await self.bot.db.verified.delete_many({'_id': player['_id']})
@@ -122,8 +120,6 @@ class server(commands.Cog):
                 pass
         except Exception as e:
             print(e)
-
-
 
 
 def setup(bot):

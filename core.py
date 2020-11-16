@@ -18,6 +18,9 @@ logging.basicConfig(
     format="[%(asctime)s] [%(levelname)s:%(name)s] %(message)s", level=logging.INFO
 )
 
+intents = discord.Intents.default()  # All but the two privileged ones
+intents.members = True
+
 
 class Defyce(commands.Bot):
 
@@ -25,7 +28,8 @@ class Defyce(commands.Bot):
         super().__init__(
             command_prefix=[">"],
             case_insensitive=True,
-            reconnect=True
+            reconnect=True,
+            intents=intents
         )
 
         with open('./data/settings.json') as settings:
